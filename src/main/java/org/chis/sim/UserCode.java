@@ -19,6 +19,8 @@ public class UserCode{
     static Motor rightTopMotor;
     static Motor rightBottomMotor;
 
+    static Vector2D joystick;
+
     public static void initialize(){ //this function is run once when the robot starts
         GraphicDebug.turnOnAll(); //displaying the graphs
 
@@ -31,7 +33,7 @@ public class UserCode{
 
     public static void execute(){ //this function is run 50 times a second (every 0.02 second)
 
-        Vector2D joystick = new Vector2D(Controls.rawX, -Controls.rawY, Type.CARTESIAN);
+        joystick = new Vector2D(Controls.rawX, -Controls.rawY, Type.CARTESIAN);
 
         controller.updateState(
             Main.robot.heading,
@@ -103,15 +105,15 @@ public class UserCode{
     // Motion graphs
     static Serie w1s1 = new Serie(Color.BLUE, 3);
     static Serie w1s2 = new Serie(Color.RED, 3);
-    static GraphicDebug w1 = new GraphicDebug("robot position", new Serie[]{w1s1, w1s2}, 100);
+    static GraphicDebug w1 = new GraphicDebug("robot velocity", new Serie[]{w1s1, w1s2}, 100);
 
     static Serie w2s1 = new Serie(Color.BLUE, 3);
     static Serie w2s2 = new Serie(Color.RED, 3);
     static GraphicDebug w2 = new GraphicDebug("robot heading", new Serie[]{w2s1, w2s2}, 200);
     
     private static void graph(){
-        w1s1.addPoint(Main.elaspedTime, Main.robot.leftModule.topMotor.voltage);
-        w1s2.addPoint(Main.elaspedTime, Main.robot.leftModule.bottomMotor.voltage);
+        w1s1.addPoint(Main.robot.linVelo.x, Main.robot.linVelo.y);
+        // w1s2.addPoint(0.3*joystick.x, 0.3*joystick.y);
 
         w2s1.addPoint(Main.elaspedTime, controller.robotState.heading);
         w2s2.addPoint(Main.elaspedTime, targetRobotState.heading);

@@ -60,7 +60,7 @@ public class Main {
                     Controls.updateControls();
                 }
                 try{
-                    Thread.sleep(10);
+                    Thread.sleep(1);
                 }catch(InterruptedException e){
                     e.printStackTrace();
                 }
