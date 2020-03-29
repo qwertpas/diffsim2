@@ -58,7 +58,7 @@ public class UserCode{
             controller.leftController.modulePowers.bottomPower,
             controller.rightController.modulePowers.topPower,
             controller.rightController.modulePowers.bottomPower,
-            0.0
+            0.1
         );
 
 
@@ -114,8 +114,8 @@ public class UserCode{
         w1s1.addPoint(Main.robot.linVelo.x, Main.robot.linVelo.y);
         // w1s2.addPoint(0.3*joystick.x, 0.3*joystick.y);
 
-        w2s1.addPoint(Main.elaspedTime, controller.robotState.heading);
-        w2s2.addPoint(Main.elaspedTime, targetRobotState.heading);
+        w2s1.addPoint(Main.elaspedTime, controller.leftController.state.moduleAngle);
+        w2s2.addPoint(Main.elaspedTime, controller.leftController.modifiedTargetState.moduleAngle);
         // w1s1.addPoint(Main.robot.leftModule.topRingSpeed, Main.robot.leftModule.bottomRingSpeed);
 
 

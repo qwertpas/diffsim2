@@ -2,9 +2,7 @@ package org.chis.sim.userclasses;
 
 import org.chis.sim.Constants;
 import org.chis.sim.Util.Vector2D;
-import org.chis.sim.Util.Vector2D.Type;
 import org.chis.sim.userclasses.ModuleController.ModuleState;
-import org.ejml.simple.SimpleMatrix;
 
 public class RobotController {
 
@@ -24,20 +22,16 @@ public class RobotController {
         RobotState modifiedTargetState = targetRobotState.copy();
         modifiedTargetState.heading = calcClosestHeading(robotState.heading, targetRobotState.heading);
 
-        double angVelo = 20*(modifiedTargetState.heading - robotState.heading);
+        double xcr = targetRobotState.linVelo.x;
+        double ycr = targetRobotState.linVelo.y;
+        double vt = targetRobotState.linVelo.getMagnitude();
+
+        double leftModuleAngle = Math.atan2(ycr - Constants.HALF_DIST_BETWEEN_WHEELS, xcr);
+        double rightModuleAngle = Math.atan2(ycr + Constants.HALF_DIST_BETWEEN_WHEELS, xcr);
         
-        Vector2D targetLeftVelo = new Vector2D(
-            modifiedTargetState.linVelo.x - angVelo * Constants.HALF_DIST_BETWEEN_WHEELS, 
-            modifiedTargetState.linVelo.y, 
-            Type.CARTESIAN);
 
-        Vector2D targetRightVelo = new Vector2D(
-            modifiedTargetState.linVelo.x + angVelo * Constants.HALF_DIST_BETWEEN_WHEELS, 
-            modifiedTargetState.linVelo.y, 
-            Type.CARTESIAN);
-
-        leftTargetModuleState = new ModuleState(targetLeftVelo.getAngle(), 0, 0, targetLeftVelo.getMagnitude());
-        rightTargetModuleState = new ModuleState(targetRightVelo.getAngle(), 0, 0, targetRightVelo.getMagnitude());
+        leftTargetModuleState = new ModuleState(leftModuleAngle, 0, 0, vt);
+        rightTargetModuleState = new ModuleState(rightModuleAngle, 0, 0, vt);
 
         leftController.move(leftTargetModuleState);
         rightController.move(rightTargetModuleState);
