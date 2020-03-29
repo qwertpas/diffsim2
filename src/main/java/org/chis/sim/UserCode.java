@@ -5,7 +5,6 @@ import org.chis.sim.Util.Vector2D;
 import org.chis.sim.Util.Vector2D.Type;
 import org.chis.sim.userclasses.RobotController;
 import org.chis.sim.userclasses.RobotController.RobotState;
-import org.ejml.simple.SimpleMatrix;
 
 import java.awt.Color;
 
