@@ -11,30 +11,40 @@ public class RobotController {
     public ModuleController leftController = new ModuleController(new ModuleState());
     public ModuleController rightController = new ModuleController(new ModuleState());
 
-    public ModuleState leftTargetModuleState;
-    public ModuleState rightTargetModuleState;
+    public ModuleState targetLeftModuleState;
+    public ModuleState targetRightModuleState;
 
     public RobotController(RobotState robotState){
         this.robotState = robotState;
     }
 
     public void move(RobotState targetRobotState){
-        RobotState modifiedTargetState = targetRobotState.copy();
-        modifiedTargetState.heading = calcClosestHeading(robotState.heading, targetRobotState.heading);
 
-        double xcr = targetRobotState.linVelo.x;
-        double ycr = targetRobotState.linVelo.y;
-        double vt = targetRobotState.linVelo.getMagnitude();
+        double targetLeftModuleAngle;
+        double targetRightModuleAngle;
 
-        double leftModuleAngle = Math.atan2(ycr - Constants.HALF_DIST_BETWEEN_WHEELS, xcr);
-        double rightModuleAngle = Math.atan2(ycr + Constants.HALF_DIST_BETWEEN_WHEELS, xcr);
-        
+        double targetTangentialSpeed = targetRobotState.linVelo.getMagnitude(); //of the center of the robot
 
-        leftTargetModuleState = new ModuleState(leftModuleAngle, 0, 0, vt);
-        rightTargetModuleState = new ModuleState(rightModuleAngle, 0, 0, vt);
+        if(Math.abs(targetRobotState.angVelo) < 0.1){  //going straight deadband
+            targetLeftModuleAngle = leftController.state.moduleAngle;
+            targetRightModuleAngle = rightController.state.moduleAngle;
+        }else{
+            //Coords of center of rotation
+            double xcr = targetRobotState.linVelo.y / targetRobotState.angVelo;
+            double ycr = -targetRobotState.linVelo.x / targetRobotState.angVelo;
+    
+            targetLeftModuleAngle = Math.atan2(ycr - Constants.HALF_DIST_BETWEEN_WHEELS, xcr) - Math.PI/2.0;
+            targetRightModuleAngle = Math.atan2(ycr + Constants.HALF_DIST_BETWEEN_WHEELS, xcr) - Math.PI/2.0;
+        }
 
-        leftController.move(leftTargetModuleState);
-        rightController.move(rightTargetModuleState);
+        double targetLeftWheelSpeed = targetTangentialSpeed - targetRobotState.angVelo * Constants.HALF_DIST_BETWEEN_WHEELS;
+        double targetRightWheelSpeed = targetTangentialSpeed + targetRobotState.angVelo * Constants.HALF_DIST_BETWEEN_WHEELS;
+
+        targetLeftModuleState = new ModuleState(targetLeftModuleAngle, 0, 0, targetLeftWheelSpeed);
+        targetRightModuleState = new ModuleState(targetRightModuleAngle, 0, 0, targetRightWheelSpeed);
+
+        leftController.move(targetLeftModuleState);
+        rightController.move(targetRightModuleState);
     }
 
     public double calcClosestHeading(double currentHeading, double targetHeading){
@@ -54,7 +64,7 @@ public class RobotController {
     }
 
     public void updateState(
-        double robotHeading,     
+        double angVelo,     
         double leftTopEncoderPosition,
         double leftBottomEncoderPosition,
         double leftTopEncoderVelocity,
@@ -64,7 +74,7 @@ public class RobotController {
         double rightTopEncoderVelocity,
         double rightBottomEncoderVelocity
     ){
-        robotState.heading = robotHeading;
+        robotState.angVelo = angVelo;
         leftController.updateState(
             leftTopEncoderPosition, 
             leftBottomEncoderPosition, 
@@ -81,17 +91,17 @@ public class RobotController {
 
     public static class RobotState{
         public Vector2D linVelo;
-        public double heading;
-        public RobotState(Vector2D linVelo, double heading){
+        public double angVelo;
+        public RobotState(Vector2D linVelo, double angVelo){
             this.linVelo = linVelo;
-            this.heading = heading;
+            this.angVelo = angVelo;
         }
         public RobotState(){
             this.linVelo = new Vector2D();
-            this.heading = 0;
+            this.angVelo = 0;
         }
         public RobotState copy(){
-            return new RobotState(linVelo, heading);
+            return new RobotState(linVelo, angVelo);
         }
     }
 
