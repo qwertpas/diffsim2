@@ -420,8 +420,8 @@ public class Util {
     }
 
     public Vector2D subtract(Vector2D valueToSubtract){
-      return new Vector2D(this.x + valueToSubtract.x,
-                          this.y + valueToSubtract.y,
+      return new Vector2D(this.x - valueToSubtract.x,
+                          this.y - valueToSubtract.y,
                           Type.CARTESIAN);
     }
 

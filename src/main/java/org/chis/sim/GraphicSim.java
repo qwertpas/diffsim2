@@ -5,7 +5,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.ImageObserver;
 import java.awt.Point;
-import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -18,6 +17,8 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import org.chis.sim.Util.Vector2D;
 
 public class GraphicSim extends JPanel implements MouseListener {
 	private static final long serialVersionUID = -87884863222799400L;
@@ -100,8 +101,10 @@ public class GraphicSim extends JPanel implements MouseListener {
 		drawFromCenter(g, moduleImage, 0, robotDisplayWidth/2, -Main.robot.leftModule.moduleAngle, this);
 
         drawFromCenter(g, moduleImage, robotDisplayWidth, robotDisplayWidth/2, -Main.robot.rightModule.moduleAngle, this);
+
         
-        drawFromCenter(g, turnCenterImage, (int) (-UserCode.controller.turnCenter.y * Constants.DISPLAY_SCALE.getDouble())+10, (int) (UserCode.controller.turnCenter.x * Constants.DISPLAY_SCALE.getDouble())+10, 0, this);
+        Vector2D turnCenter = UserCode.controller.turnCenter;
+        g.drawImage(turnCenterImage, (int) (turnCenter.x * Constants.DISPLAY_SCALE.getDouble()/robotScale)+10, (int) -(turnCenter.y * Constants.DISPLAY_SCALE.getDouble()/robotScale)+10, this);
 
 
 

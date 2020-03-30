@@ -6,8 +6,8 @@ public class Robot{
 
     DiffModule leftModule, rightModule;
 
-    Vector2D position = new Vector2D(5, 5, Vector2D.Type.CARTESIAN);
-    double heading = 0;
+    public Vector2D position = new Vector2D(5, 5, Vector2D.Type.CARTESIAN);
+    public double heading = 0;
 
     Vector2D linVelo = new Vector2D();
     double angVelo = 0;
