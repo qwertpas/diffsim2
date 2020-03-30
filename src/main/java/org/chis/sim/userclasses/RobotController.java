@@ -46,8 +46,13 @@ public class RobotController {
         double targetLeftWheelSpeed = targetTangentialSpeed - targetRobotState.angVelo * Constants.HALF_DIST_BETWEEN_WHEELS;
         double targetRightWheelSpeed = targetTangentialSpeed + targetRobotState.angVelo * Constants.HALF_DIST_BETWEEN_WHEELS;
 
-        targetLeftModuleState = new ModuleState(targetLeftModuleAngle, 0, 0, targetLeftWheelSpeed);
-        targetRightModuleState = new ModuleState(targetRightModuleAngle, 0, 0, targetRightWheelSpeed);
+        System.out.println("left: " + targetLeftWheelSpeed);
+        System.out.println("right: " + targetRightWheelSpeed);
+        System.out.println("tan: " + targetTangentialSpeed);
+
+
+        targetLeftModuleState = new ModuleState(targetLeftModuleAngle, 0, 0, 0 / Constants.WHEEL_RADIUS.getDouble());
+        targetRightModuleState = new ModuleState(targetRightModuleAngle, 0, 0, 0 / Constants.WHEEL_RADIUS.getDouble());
 
         leftController.move(targetLeftModuleState);
         rightController.move(targetRightModuleState);
