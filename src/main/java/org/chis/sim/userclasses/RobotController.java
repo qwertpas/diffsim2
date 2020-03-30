@@ -14,6 +14,8 @@ public class RobotController {
     public ModuleState targetLeftModuleState;
     public ModuleState targetRightModuleState;
 
+    public Vector2D turnCenter = new Vector2D(); 
+
     public RobotController(RobotState robotState){
         this.robotState = robotState;
     }
@@ -24,17 +26,21 @@ public class RobotController {
         double targetRightModuleAngle;
 
         double targetTangentialSpeed = targetRobotState.linVelo.getMagnitude(); //of the center of the robot
+        // double targetTangentialSpeed = targetRobotState.angVelo; //of the center of the robot
 
         if(Math.abs(targetRobotState.angVelo) < 0.1){  //going straight deadband
             targetLeftModuleAngle = leftController.state.moduleAngle;
             targetRightModuleAngle = rightController.state.moduleAngle;
         }else{
             //Coords of center of rotation
-            double xcr = targetRobotState.linVelo.y / targetRobotState.angVelo;
-            double ycr = -targetRobotState.linVelo.x / targetRobotState.angVelo;
+            turnCenter.x = targetRobotState.linVelo.y / targetRobotState.angVelo;
+            turnCenter.y = -targetRobotState.linVelo.x / targetRobotState.angVelo;
+
+            // turnCenter.x += targetRobotState.linVelo.x * 0.01;
+            // turnCenter.y += targetRobotState.linVelo.y * 0.01;
     
-            targetLeftModuleAngle = Math.atan2(ycr - Constants.HALF_DIST_BETWEEN_WHEELS, xcr) - Math.PI/2.0;
-            targetRightModuleAngle = Math.atan2(ycr + Constants.HALF_DIST_BETWEEN_WHEELS, xcr) - Math.PI/2.0;
+            targetLeftModuleAngle = Math.atan2(turnCenter.y - Constants.HALF_DIST_BETWEEN_WHEELS, turnCenter.x) - Math.PI/2.0;
+            targetRightModuleAngle = Math.atan2(turnCenter.y + Constants.HALF_DIST_BETWEEN_WHEELS, turnCenter.x) - Math.PI/2.0;
         }
 
         double targetLeftWheelSpeed = targetTangentialSpeed - targetRobotState.angVelo * Constants.HALF_DIST_BETWEEN_WHEELS;

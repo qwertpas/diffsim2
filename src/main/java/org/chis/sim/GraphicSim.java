@@ -28,9 +28,12 @@ public class GraphicSim extends JPanel implements MouseListener {
 
 	static File robotFile;
 	static File moduleFile;
+	static File turnCenterFile;
 
 	static BufferedImage robotImage;
-	static BufferedImage moduleImage;
+    static BufferedImage moduleImage;
+    static BufferedImage turnCenterImage;
+
 
 	static int screenHeight;
 	static int screenWidth;
@@ -53,7 +56,6 @@ public class GraphicSim extends JPanel implements MouseListener {
 		double windowHeight = frame.getContentPane().getSize().getHeight();
 		super.paint(g);
 		Graphics2D g2d = (Graphics2D) g;
-		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
 		int x = (int) Util.posModulo(Main.robot.position.x * Constants.DISPLAY_SCALE.getDouble(), windowWidth); // robot position in pixels
 		int y = (int) (windowHeight - Util.posModulo(Main.robot.position.y * Constants.DISPLAY_SCALE.getDouble(), windowHeight));
@@ -62,8 +64,8 @@ public class GraphicSim extends JPanel implements MouseListener {
 		g.drawString("heading " + Util.roundHundreths(Main.robot.heading), 500, 600);
 		g.drawString("L angle " + Util.roundHundreths(Math.toDegrees(UserCode.controller.leftController.state.moduleAngle)), 500, 625);
 		g.drawString("R angle " + Util.roundHundreths(Math.toDegrees(UserCode.controller.rightController.state.moduleAngle)), 500, 650);
-		g.drawString("L odometer "+ UserCode.controller.leftController.odometer.x, 500, 675);
-		g.drawString("L wheelAngVelo "+ UserCode.controller.rightController.state.wheelAngVelo, 500, 700);
+		g.drawString("turn x "+ Util.roundHundreths(UserCode.controller.turnCenter.x), 500, 675);
+		g.drawString("turn y "+ Util.roundHundreths(UserCode.controller.turnCenter.y), 500, 700);
 		g.drawString("LT volt "+ Util.roundHundreths(Main.robot.leftModule.topMotor.voltage), 500, 725);
 		g.drawString("LB volt "+ Util.roundHundreths(Main.robot.leftModule.bottomMotor.voltage), 500, 750);
 		g.drawString("RT volt "+ Util.roundHundreths(Main.robot.rightModule.topMotor.voltage), 500, 775);
@@ -97,7 +99,9 @@ public class GraphicSim extends JPanel implements MouseListener {
 
 		drawFromCenter(g, moduleImage, 0, robotDisplayWidth/2, -Main.robot.leftModule.moduleAngle, this);
 
-		drawFromCenter(g, moduleImage, robotDisplayWidth, robotDisplayWidth/2, -Main.robot.rightModule.moduleAngle, this);
+        drawFromCenter(g, moduleImage, robotDisplayWidth, robotDisplayWidth/2, -Main.robot.rightModule.moduleAngle, this);
+        
+        drawFromCenter(g, turnCenterImage, (int) (-UserCode.controller.turnCenter.y * Constants.DISPLAY_SCALE.getDouble())+10, (int) (UserCode.controller.turnCenter.x * Constants.DISPLAY_SCALE.getDouble())+10, 0, this);
 
 
 
@@ -116,9 +120,12 @@ public class GraphicSim extends JPanel implements MouseListener {
 		try {
 			robotFile = new File("./src/images/robot.png");
 			moduleFile = new File("./src/images/module.png");
+			turnCenterFile = new File("./src/images/turnCenter.png");
 
 			robotImage = ImageIO.read(robotFile);
-			moduleImage = ImageIO.read(moduleFile);
+            moduleImage = ImageIO.read(moduleFile);
+            turnCenterImage = ImageIO.read(turnCenterFile);
+
 
 			setDisplayScales(robotFile);
 
