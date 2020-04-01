@@ -1,8 +1,6 @@
 package org.chis.sim.userclasses;
 
 import org.chis.sim.Constants;
-import org.chis.sim.Main;
-import org.chis.sim.UserCode;
 import org.chis.sim.Util.Vector2D;
 import org.chis.sim.Util.Vector2D.Type;
 import org.chis.sim.userclasses.ModuleController.ModuleState;
@@ -18,6 +16,7 @@ public class RobotController {
     public ModuleState targetRightModuleState;
 
     public Vector2D turnCenter = new Vector2D(); 
+    double targetLeftWheelSpeed, targetRightWheelSpeed;
 
     public RobotController(RobotState robotState){
         this.robotState = robotState;
@@ -29,11 +28,19 @@ public class RobotController {
         double targetRightModuleAngle;
 
         double targetTangentialSpeed = targetRobotState.linVelo.getMagnitude(); //of the center of the robot
-        // double targetTangentialSpeed = targetRobotState.angVelo; //of the center of the robot
 
-        if(Math.abs(targetRobotState.angVelo) < 0.001){  //going straight deadband
+        if(Math.abs(targetRobotState.angVelo) < 0.01){  //going straight deadband
             targetLeftModuleAngle = targetRobotState.linVelo.getAngle();
             targetRightModuleAngle = targetRobotState.linVelo.getAngle();
+
+            targetLeftWheelSpeed = targetRobotState.linVelo.getMagnitude();
+            targetRightWheelSpeed = targetRobotState.linVelo.getMagnitude();
+        }else if(targetRobotState.linVelo.getMagnitude() < 0.01){
+            targetLeftModuleAngle = 0;
+            targetRightModuleAngle = 0;
+
+            targetLeftWheelSpeed = -targetRobotState.angVelo * Constants.HALF_DIST_BETWEEN_WHEELS;
+            targetRightWheelSpeed = targetRobotState.angVelo * Constants.HALF_DIST_BETWEEN_WHEELS;
         }else{
             //Coords of center of rotation
             // turnCenter.x = targetRobotState.linVelo.y / Math.abs(targetRobotState.angVelo);
@@ -50,21 +57,28 @@ public class RobotController {
             // turnCenter.x += Main.robot.position.x * 0.01;
             // turnCenter.y += targetRobotState.linVelo.y * 0.01;
     
-            targetLeftModuleAngle = Math.atan2(turnCenter.y - Constants.HALF_DIST_BETWEEN_WHEELS, turnCenter.x) + Math.copySign(Math.PI/2.0, targetRobotState.linVelo.y);
-            targetRightModuleAngle = Math.atan2(turnCenter.y + Constants.HALF_DIST_BETWEEN_WHEELS, turnCenter.x) + Math.copySign(Math.PI/2.0, targetRobotState.linVelo.y);
+            targetLeftModuleAngle = Math.atan2(turnCenter.y - Constants.HALF_DIST_BETWEEN_WHEELS, turnCenter.x) - Math.copySign(Math.PI/2.0, turnCenter.x);
+            targetRightModuleAngle = Math.atan2(turnCenter.y + Constants.HALF_DIST_BETWEEN_WHEELS, turnCenter.x) - Math.copySign(Math.PI/2.0, turnCenter.x);
 
+            Vector2D centerToLeftWheel = new Vector2D(Constants.HALF_DIST_BETWEEN_WHEELS, Math.PI/2.0, Type.POLAR);
+            Vector2D centerToRightWheel = new Vector2D(Constants.HALF_DIST_BETWEEN_WHEELS, -Math.PI/2.0, Type.POLAR);
+
+            Vector2D leftWheelToTurnCenter = turnCenter.subtract(centerToLeftWheel);
+            Vector2D rightWheelToTurnCenter = turnCenter.subtract(centerToRightWheel);
+
+            targetLeftWheelSpeed = targetTangentialSpeed * leftWheelToTurnCenter.getMagnitude() / turnCenter.getMagnitude();
+            targetRightWheelSpeed = targetTangentialSpeed * rightWheelToTurnCenter.getMagnitude() / turnCenter.getMagnitude();
             // targetLeftModuleAngle = 0;
             // targetRightModuleAngle = 0;
         }
 
-        double targetLeftWheelSpeed = targetTangentialSpeed - targetRobotState.angVelo * Constants.HALF_DIST_BETWEEN_WHEELS;
-        double targetRightWheelSpeed = targetTangentialSpeed + targetRobotState.angVelo * Constants.HALF_DIST_BETWEEN_WHEELS;
+        
 
         System.out.println("leftAngle: " + targetLeftModuleAngle);
         System.out.println("rightAngle: " + targetRightModuleAngle);
         System.out.println("left: " + targetLeftWheelSpeed);
         System.out.println("right: " + targetRightWheelSpeed);
-        System.out.println("tan: " + targetTangentialSpeed);
+        // System.out.println("tan: " + targetTangentialSpeed);
 
 
         targetLeftModuleState = new ModuleState(targetLeftModuleAngle, 0, 0, targetLeftWheelSpeed / Constants.WHEEL_RADIUS.getDouble());
