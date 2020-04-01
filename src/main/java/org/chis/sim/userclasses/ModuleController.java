@@ -19,7 +19,7 @@ public class ModuleController{
     SimpleMatrix u;
 
     private PIDF anglePIDF = new PIDF(1, 0.05, 0, 0.0, 0, 0);
-    private PIDF forwardPIDF = new PIDF(2, 0.1, 0, 0.0, 0, 0.2);
+    private PIDF forwardPIDF = new PIDF(1, 0.1, 0, 0.0, 0, 0.2);
 
     private SimpleMatrix K = new SimpleMatrix(new double[][] { //from matlab calcs
         { 22.36,    0,    0,    8.06},

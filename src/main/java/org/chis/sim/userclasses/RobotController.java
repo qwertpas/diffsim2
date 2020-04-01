@@ -29,13 +29,13 @@ public class RobotController {
 
         double targetTangentialSpeed = targetRobotState.linVelo.getMagnitude(); //of the center of the robot
 
-        if(Math.abs(targetRobotState.angVelo) < 0.01){  //going straight deadband
+        if(Math.abs(targetRobotState.angVelo) < 0.001){  //going straight deadband
             targetLeftModuleAngle = targetRobotState.linVelo.getAngle();
             targetRightModuleAngle = targetRobotState.linVelo.getAngle();
 
             targetLeftWheelSpeed = targetRobotState.linVelo.getMagnitude();
             targetRightWheelSpeed = targetRobotState.linVelo.getMagnitude();
-        }else if(targetRobotState.linVelo.getMagnitude() < 0.01){
+        }else if(targetRobotState.linVelo.getMagnitude() < 0.001){
             targetLeftModuleAngle = 0;
             targetRightModuleAngle = 0;
 
