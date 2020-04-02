@@ -45,6 +45,7 @@ public class Robot{
         linVelo = linVelo.add(linAccel.scalarMult(dt)); //linear velocity of robot center of mass
         angVelo = angVelo + angAccel * dt; //angular velocity around robot center
         
+        //TODO: fix scalar add
         //rotate linVelo to find velo of module relative in robot reference frame, then add the tangential velocity from the spin
         leftModule.setTranslation(linVelo.rotate(-heading).scalarAdd(-angVelo * Constants.HALF_DIST_BETWEEN_WHEELS)); 
         rightModule.setTranslation(linVelo.rotate(-heading).scalarAdd(angVelo * Constants.HALF_DIST_BETWEEN_WHEELS));

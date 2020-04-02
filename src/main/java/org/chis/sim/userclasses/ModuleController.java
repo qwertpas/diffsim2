@@ -37,7 +37,8 @@ public class ModuleController{
         
         double rotPower = anglePIDF.loop(state.moduleAngle, modifiedTargetState.moduleAngle);
         if(anglePIDF.inTolerance) rotPower = 0;
-        double forwardPower = forwardPIDF.loop(state.wheelAngVelo, modifiedTargetState.wheelAngVelo);
+        // double forwardPower = forwardPIDF.loop(state.wheelAngVelo, modifiedTargetState.wheelAngVelo);
+        double forwardPower = modifiedTargetState.wheelAngVelo*0.25;
 
         // double maxPower = Math.abs(rotPower) + Math.abs(forwardPower);
         double maxPower = 1;

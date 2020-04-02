@@ -48,8 +48,8 @@ public class Constants{
     public static Constant WHEEL_FRIC_THRESHOLD = new Constant("WHEEL_FRIC_THRESHOLD", 0.01, Type.DOUBLE); //lowest wheel scrub m/sec considered as 'moving' to kine fric
 
     // Rotational friction that slows robot turning. Is a combo of robot length/width, drop center, friction in omnis. Is a torque.
-    public static Constant ROT_STATIC_FRIC = new Constant("ROT_STATIC_FRIC", 0.01, Type.DOUBLE); 
-    public static Constant ROT_KINE_FRIC = new Constant("ROT_KINE_FRIC", 0.01, Type.DOUBLE); 
+    public static Constant ROT_STATIC_FRIC = new Constant("ROT_STATIC_FRIC", 0.2, Type.DOUBLE); 
+    public static Constant ROT_KINE_FRIC = new Constant("ROT_KINE_FRIC", 0.2, Type.DOUBLE); 
     public static Constant ROT_FRIC_THRESHOLD = new Constant("ROT_FRIC_THRESHOLD", 0.1, Type.DOUBLE); //lowest robot angular velocity rad/sec considered as 'moving' to kine fric
 
     public static Constant GRAV_ACCEL = new Constant("GRAV_ACCEL", 9.81, Type.DOUBLE);
