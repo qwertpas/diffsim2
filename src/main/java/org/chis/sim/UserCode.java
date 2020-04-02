@@ -51,6 +51,7 @@ public class UserCode{
         joystick = joystick.scalarMult(0.1).rotate(0);
         
         targetRobotState = new RobotState(new Vector2D(joystick.y, -joystick.x, Type.CARTESIAN), 0);
+        // targetRobotState = new RobotState(new Vector2D(0.1, -0.1, Type.CARTESIAN), 0);
 
         controller.move(targetRobotState);
 
@@ -113,11 +114,11 @@ public class UserCode{
     // Motion graphs
     static Serie w1s1 = new Serie(Color.BLUE, 3);
     static Serie w1s2 = new Serie(Color.RED, 3);
-    static GraphicDebug w1 = new GraphicDebug("forces", new Serie[]{w1s1, w1s2}, 100);
+    static GraphicDebug w1 = new GraphicDebug("net forces", new Serie[]{w1s1, w1s2}, 100);
 
     static Serie w2s1 = new Serie(Color.BLUE, 3);
     static Serie w2s2 = new Serie(Color.RED, 3);
-    static GraphicDebug w2 = new GraphicDebug("left angVelo", new Serie[]{w2s1, w2s2}, 100);
+    static GraphicDebug w2 = new GraphicDebug("scrub forces", new Serie[]{w2s1, w2s2}, 100);
 
     static Serie w3s1 = new Serie(Color.BLUE, 3);
     static Serie w3s2 = new Serie(Color.RED, 3);

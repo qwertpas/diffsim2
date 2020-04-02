@@ -1,6 +1,7 @@
 package org.chis.sim;
 
 import org.chis.sim.Util.Vector2D;
+import org.chis.sim.Util.Vector2D.Type;
 
 public class Robot{
 
@@ -47,8 +48,12 @@ public class Robot{
         
         //TODO: fix scalar add
         //rotate linVelo to find velo of module relative in robot reference frame, then add the tangential velocity from the spin
-        leftModule.setTranslation(linVelo.rotate(-heading).scalarAdd(-angVelo * Constants.HALF_DIST_BETWEEN_WHEELS)); 
-        rightModule.setTranslation(linVelo.rotate(-heading).scalarAdd(angVelo * Constants.HALF_DIST_BETWEEN_WHEELS));
+        // leftModule.setTranslation(linVelo.rotate(-heading).scalarAdd(-angVelo * Constants.HALF_DIST_BETWEEN_WHEELS)); 
+        // rightModule.setTranslation(linVelo.rotate(-heading).scalarAdd(angVelo * Constants.HALF_DIST_BETWEEN_WHEELS));
+        Vector2D robotRelTranslation = linVelo.rotate(-heading);
+        Vector2D spinModifier = new Vector2D(angVelo * Constants.HALF_DIST_BETWEEN_WHEELS, robotRelTranslation.getAngle(), Type.POLAR);
+        leftModule.setTranslation(robotRelTranslation.subtract(spinModifier)); 
+        rightModule.setTranslation(robotRelTranslation.add(spinModifier));
 
         heading = heading + angVelo * dt; //integrating angVelo
 
