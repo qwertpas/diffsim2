@@ -54,6 +54,7 @@ class DiffModule {
 
         driveForce = wheelTorque / Constants.WHEEL_RADIUS.getDouble(); // F=ma
         scrubForce = Util.applyFrictions(0, wheelScrubVelo, Constants.WHEEL_STATIC_FRIC, Constants.WHEEL_KINE_FRIC, Constants.WHEEL_FRIC_THRESHOLD.getDouble());
+        // scrubForce = -wheelScrubVelo*5;
         force = new Vector2D(driveForce, scrubForce, Vector2D.Type.CARTESIAN).rotate(moduleAngle);
     }
 

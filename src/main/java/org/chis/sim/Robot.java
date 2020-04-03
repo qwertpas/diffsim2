@@ -21,6 +21,8 @@ public class Robot{
     Vector2D forceNet = new Vector2D();
     Boolean slipping = false;
 
+    Vector2D robotRelTranslation = new Vector2D();
+
     double dt;
     double lastTime;
 
@@ -46,12 +48,13 @@ public class Robot{
         linVelo = linVelo.add(linAccel.scalarMult(dt)); //linear velocity of robot center of mass
         angVelo = angVelo + angAccel * dt; //angular velocity around robot center
         
-        //TODO: fix scalar add
+        //TODO: fix scrub
+        // I think its done
         //rotate linVelo to find velo of module relative in robot reference frame, then add the tangential velocity from the spin
         // leftModule.setTranslation(linVelo.rotate(-heading).scalarAdd(-angVelo * Constants.HALF_DIST_BETWEEN_WHEELS)); 
         // rightModule.setTranslation(linVelo.rotate(-heading).scalarAdd(angVelo * Constants.HALF_DIST_BETWEEN_WHEELS));
-        Vector2D robotRelTranslation = linVelo.rotate(-heading);
-        Vector2D spinModifier = new Vector2D(angVelo * Constants.HALF_DIST_BETWEEN_WHEELS, robotRelTranslation.getAngle(), Type.POLAR);
+        robotRelTranslation = linVelo.rotate(-heading);
+        Vector2D spinModifier = new Vector2D(angVelo * Constants.HALF_DIST_BETWEEN_WHEELS, 0, Type.POLAR);
         leftModule.setTranslation(robotRelTranslation.subtract(spinModifier)); 
         rightModule.setTranslation(robotRelTranslation.add(spinModifier));
 

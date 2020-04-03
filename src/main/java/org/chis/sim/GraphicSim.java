@@ -102,10 +102,20 @@ public class GraphicSim extends JPanel implements MouseListener {
 
         drawFromCenter(g, moduleImage, robotDisplayWidth, robotDisplayWidth/2, -Main.robot.rightModule.moduleAngle, this);
 
+        g.setColor(Color.CYAN);
+        Vector2D vectorL = Main.robot.leftModule.moduleTranslation;
+        Vector2D vectorR = Main.robot.rightModule.moduleTranslation;
+        g.drawLine(35, 15, (int) (35 + vectorL.x * 10), (int) (15 - vectorL.y*10));
+        g.drawLine(35, 60, (int) (35 + vectorR.x * 10), (int) (60 - vectorR.y*10));
+        Vector2D vectorRobot = Main.robot.robotRelTranslation;
+        g.drawLine(35, 38, (int) (35 + vectorRobot.x * 10), (int) (38 - vectorRobot.y*10));
+
+
         
         Vector2D turnCenter = UserCode.controller.turnCenter;
         g.drawImage(turnCenterImage, (int) (turnCenter.x * Constants.DISPLAY_SCALE.getDouble()/robotScale)+10, (int) -(turnCenter.y * Constants.DISPLAY_SCALE.getDouble()/robotScale)+10, this);
 
+        
 
 
 
@@ -166,7 +176,7 @@ public class GraphicSim extends JPanel implements MouseListener {
 		g2d.rotate(rotation);
 		g.drawImage(image, -image.getWidth()/2, -image.getWidth()/2, imageObserver);
 		g2d.setTransform(initialTransform);
-	}
+    }
 
 	
 

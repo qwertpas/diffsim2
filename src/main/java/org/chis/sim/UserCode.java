@@ -50,7 +50,7 @@ public class UserCode{
         // joystick = joystick.scalarMult(8).rotate(-Main.robot.heading);
         joystick = joystick.scalarMult(0.1).rotate(0);
         
-        targetRobotState = new RobotState(new Vector2D(joystick.y, -joystick.x, Type.CARTESIAN), 0);
+        targetRobotState = new RobotState(new Vector2D(joystick.y, -joystick.x, Type.CARTESIAN), Controls.slider);
         // targetRobotState = new RobotState(new Vector2D(0.1, -0.1, Type.CARTESIAN), 0);
 
         controller.move(targetRobotState);
@@ -60,7 +60,7 @@ public class UserCode{
             controller.leftController.modulePowers.bottomPower,
             controller.rightController.modulePowers.topPower,
             controller.rightController.modulePowers.bottomPower,
-            0.1
+            0.0
         );
 
         // setDrivePowersAndFeed(
