@@ -28,7 +28,7 @@ public class Constants{
     public static Constant STALL_TORQUE = new Constant("STALL_TORQUE", 0.537, Type.DOUBLE); //76 oz-in for yellowjacket 3.7, converted to newton*meters
     public static Constant FREE_SPEED = new Constant("FREE_SPEED", 169.6, Type.DOUBLE); //1620 rpm for yellowjacket 3.7, converted to rad/sec
     public static Constant TICKS_PER_REV = new Constant("TICKS_PER_REV", 103.6, Type.DOUBLE); //1 rev of output shaft of yellowjacket 3.7 -> 103.6 encoder ticks
-    public static Constant RINGS_GEAR_RATIO = new Constant("RINGS_GEAR_RATIO", (107/13.0) * (18/15.0), Type.DOUBLE); //GR between motor and gear rings
+    public static Constant RINGS_GEAR_RATIO = new Constant("RINGS_GEAR_RATIO", (107/20.0) * (45/20.0), Type.DOUBLE); //GR between motor and gear rings
     public static Constant WHEEL_GEAR_RATIO = new Constant("WHEEL_GEAR_RATIO", (18/107.0), Type.DOUBLE); //GR between top/bottom gear rings and wheel
     public static Constant MODULE_ROT_INERTIA = new Constant("MODULE_ROT_INERTIA", 0.0005, Type.DOUBLE); //Assume a cylinder with radius 0.1m mass 0.1kg
 

@@ -19,7 +19,7 @@ public class ModuleController{
     SimpleMatrix u;
 
     private PIDF anglePIDF = new PIDF(1, 0.05, 0, 0.0, 0, 0);
-    private PIDF forwardPIDF = new PIDF(1, 0.1, 0, 0.0, 0, 0.2);
+    private PIDF forwardPIDF = new PIDF(0.1, 0.01, 0, 0.0, 0, 0);
 
     private SimpleMatrix K = new SimpleMatrix(new double[][] { //from matlab calcs
         { 22.36,    0,    0,    8.06},
@@ -37,8 +37,8 @@ public class ModuleController{
         
         double rotPower = anglePIDF.loop(state.moduleAngle, modifiedTargetState.moduleAngle);
         if(anglePIDF.inTolerance) rotPower = 0;
-        // double forwardPower = forwardPIDF.loop(state.wheelAngVelo, modifiedTargetState.wheelAngVelo);
-        double forwardPower = modifiedTargetState.wheelAngVelo*0.25;
+        double forwardPower = forwardPIDF.loop(state.wheelAngVelo, modifiedTargetState.wheelAngVelo);
+        // double forwardPower = modifiedTargetState.wheelAngVelo*0.25;
 
         // double maxPower = Math.abs(rotPower) + Math.abs(forwardPower);
         double maxPower = 1;
@@ -100,7 +100,7 @@ public class ModuleController{
     private double calcWheelAngle(double motorTop, double motorBottom){
         double avgMotorTicks = (motorTop - motorBottom) / 2.0; //wheel rotation is difference in motors / 2
         double avgMotorRevs = avgMotorTicks / Constants.TICKS_PER_REV.getDouble(); //convert encoder ticks to revolutions
-        double moduleAngleRevs = avgMotorRevs / Constants.RINGS_GEAR_RATIO.getDouble(); //module angle, in revolutions
+        double moduleAngleRevs = avgMotorRevs / (Constants.WHEEL_GEAR_RATIO.getDouble() * Constants.RINGS_GEAR_RATIO.getDouble()); //wheel angle, in revolutions
         double moduleAngleDeg = moduleAngleRevs * 2 * Math.PI; //convert revolutions to radians
         return moduleAngleDeg;
     }
