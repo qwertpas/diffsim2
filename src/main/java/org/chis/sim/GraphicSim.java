@@ -71,7 +71,9 @@ public class GraphicSim extends JPanel implements MouseListener {
 		g.drawString("LT volt "+ Util.roundHundreths(Main.robot.leftModule.topMotor.voltage), 500, 725);
 		g.drawString("LB volt "+ Util.roundHundreths(Main.robot.leftModule.bottomMotor.voltage), 500, 750);
 		g.drawString("RT volt "+ Util.roundHundreths(Main.robot.rightModule.topMotor.voltage), 500, 775);
-		g.drawString("RB volt "+ Util.roundHundreths(Main.robot.rightModule.bottomMotor.voltage), 500, 800);
+        g.drawString("RB volt "+ Util.roundHundreths(Main.robot.rightModule.bottomMotor.voltage), 500, 800);
+        g.drawString("mode "+ UserCode.controller.robotState.mode, 500, 825);
+
 
 
 		// g.drawString("LB motor speed " + Util.roundHundreths(Main.robot.leftModule.bottomMotor.angVelo), 500, 800);
