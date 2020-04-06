@@ -110,16 +110,17 @@ public class GraphicSim extends JPanel implements MouseListener {
         // Vector2D vectorRobot = Main.robot.robotRelTranslation;
 
         try{
-            Vector2D vectorL = new Vector2D(UserCode.controller.leftController.modifiedTargetState.wheelAngVelo, UserCode.controller.leftController.modifiedTargetState.moduleAngle, Type.POLAR);
-            Vector2D vectorR = new Vector2D(UserCode.controller.rightController.modifiedTargetState.wheelAngVelo, UserCode.controller.rightController.modifiedTargetState.moduleAngle, Type.POLAR);
-            // Vector2D vectorRobot = Main.robot.robotRelTranslation;
+            Vector2D vectorL = new Vector2D(UserCode.controller.targetLeftModuleState.wheelAngVelo, UserCode.controller.targetLeftModuleState.moduleAngle, Type.POLAR);
+            Vector2D vectorR = new Vector2D(UserCode.controller.targetRightModuleState.wheelAngVelo, UserCode.controller.targetRightModuleState.moduleAngle, Type.POLAR);
+            Vector2D vectorRobot = UserCode.targetRobotState.linVelo;
 
             vectorL = vectorL.scalarMult(10);
             vectorR = vectorR.scalarMult(10);
+            vectorRobot = vectorRobot.scalarMult(10);
     
             g.drawLine(35, 15, (int) (35 + vectorL.x), (int) (15 - vectorL.y));
             g.drawLine(35, 60, (int) (35 + vectorR.x), (int) (60 - vectorR.y));
-            // g.drawLine(35, 38, (int) (35 + vectorRobot.x * 10), (int) (38 - vectorRobot.y*10));
+            g.drawLine(35, 38, (int) (35 + vectorRobot.x), (int) (38 - vectorRobot.y));
         }catch(NullPointerException e){
 
         }
