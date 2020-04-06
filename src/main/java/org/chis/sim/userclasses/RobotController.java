@@ -54,7 +54,7 @@ public class RobotController {
             // turnCenter.x = targetRobotState.linVelo.y / Math.abs(targetRobotState.angVelo);
             // turnCenter.y = targetRobotState.linVelo.x / Math.abs(targetRobotState.angVelo);
 
-            turnCenter = targetRobotState.linVelo.rotate(Math.PI/2.0).scalarMult(1/targetRobotState.angVelo);
+            turnCenter = targetRobotState.linVelo.rotate(-Math.PI/2.0).scalarMult(1/targetRobotState.angVelo);
 
             // Vector2D origin2Robot = Main.robot.position.subtract(new Vector2D(5, 5, Type.CARTESIAN));
             // Vector2D robot2Origin = origin2Robot.scalarMult(-1).rotate(-Main.robot.heading);

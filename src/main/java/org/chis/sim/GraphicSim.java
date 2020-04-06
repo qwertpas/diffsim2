@@ -19,6 +19,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import org.chis.sim.Util.Vector2D;
+import org.chis.sim.Util.Vector2D.Type;
 
 public class GraphicSim extends JPanel implements MouseListener {
 	private static final long serialVersionUID = -87884863222799400L;
@@ -103,12 +104,26 @@ public class GraphicSim extends JPanel implements MouseListener {
         drawFromCenter(g, moduleImage, robotDisplayWidth, robotDisplayWidth/2, -Main.robot.rightModule.moduleAngle, this);
 
         g.setColor(Color.CYAN);
-        Vector2D vectorL = Main.robot.leftModule.moduleTranslation;
-        Vector2D vectorR = Main.robot.rightModule.moduleTranslation;
-        g.drawLine(35, 15, (int) (35 + vectorL.x * 10), (int) (15 - vectorL.y*10));
-        g.drawLine(35, 60, (int) (35 + vectorR.x * 10), (int) (60 - vectorR.y*10));
-        Vector2D vectorRobot = Main.robot.robotRelTranslation;
-        g.drawLine(35, 38, (int) (35 + vectorRobot.x * 10), (int) (38 - vectorRobot.y*10));
+
+        // Vector2D vectorL = Main.robot.leftModule.moduleTranslation;
+        // Vector2D vectorR = Main.robot.rightModule.moduleTranslation;
+        // Vector2D vectorRobot = Main.robot.robotRelTranslation;
+
+        try{
+            Vector2D vectorL = new Vector2D(UserCode.controller.leftController.modifiedTargetState.wheelAngVelo, UserCode.controller.leftController.modifiedTargetState.moduleAngle, Type.POLAR);
+            Vector2D vectorR = new Vector2D(UserCode.controller.rightController.modifiedTargetState.wheelAngVelo, UserCode.controller.rightController.modifiedTargetState.moduleAngle, Type.POLAR);
+            // Vector2D vectorRobot = Main.robot.robotRelTranslation;
+
+            vectorL = vectorL.scalarMult(10);
+            vectorR = vectorR.scalarMult(10);
+    
+            g.drawLine(35, 15, (int) (35 + vectorL.x), (int) (15 - vectorL.y));
+            g.drawLine(35, 60, (int) (35 + vectorR.x), (int) (60 - vectorR.y));
+            // g.drawLine(35, 38, (int) (35 + vectorRobot.x * 10), (int) (38 - vectorRobot.y*10));
+        }catch(NullPointerException e){
+
+        }
+        
 
 
         
