@@ -40,13 +40,13 @@ public class RobotController {
 
             targetLeftWheelSpeed = targetRobotState.linVelo.getMagnitude();
             targetRightWheelSpeed = targetRobotState.linVelo.getMagnitude();
-            // System.out.println("straight");
+            robotState.mode = "straight";
         }else if(targetRobotState.linVelo.getMagnitude() < 0.1){
             targetLeftModuleAngle = 0;
             targetRightModuleAngle = 0;
 
-            targetLeftWheelSpeed = targetRobotState.angVelo * Constants.HALF_DIST_BETWEEN_WHEELS;
-            targetRightWheelSpeed = -targetRobotState.angVelo * Constants.HALF_DIST_BETWEEN_WHEELS;
+            targetLeftWheelSpeed = -targetRobotState.angVelo * Constants.HALF_DIST_BETWEEN_WHEELS;
+            targetRightWheelSpeed = targetRobotState.angVelo * Constants.HALF_DIST_BETWEEN_WHEELS;
             robotState.mode = "spin";
 
         }else{
@@ -68,8 +68,8 @@ public class RobotController {
             // targetLeftModuleAngle = Math.atan2(turnCenter.y - Constants.HALF_DIST_BETWEEN_WHEELS, turnCenter.x) - Math.copySign(Math.PI/2.0, turnCenter.x);
             // targetRightModuleAngle = Math.atan2(turnCenter.y + Constants.HALF_DIST_BETWEEN_WHEELS, turnCenter.x) - Math.copySign(Math.PI/2.0, turnCenter.x);
 
-            Vector2D centerToLeftWheel = new Vector2D(Constants.HALF_DIST_BETWEEN_WHEELS, Math.PI/2.0, Type.POLAR);
-            Vector2D centerToRightWheel = new Vector2D(Constants.HALF_DIST_BETWEEN_WHEELS, -Math.PI/2.0, Type.POLAR);
+            Vector2D centerToLeftWheel = new Vector2D(Constants.HALF_DIST_BETWEEN_WHEELS, -Math.PI/2.0, Type.POLAR);
+            Vector2D centerToRightWheel = new Vector2D(Constants.HALF_DIST_BETWEEN_WHEELS, Math.PI/2.0, Type.POLAR);
 
             Vector2D leftWheelToTurnCenter = turnCenter.subtract(centerToLeftWheel);
             Vector2D rightWheelToTurnCenter = turnCenter.subtract(centerToRightWheel);
@@ -77,8 +77,8 @@ public class RobotController {
             targetLeftModuleAngle = leftWheelToTurnCenter.getAngle() + Math.copySign(Math.PI/2.0, targetRobotState.angVelo);
             targetRightModuleAngle = rightWheelToTurnCenter.getAngle() + Math.copySign(Math.PI/2.0, targetRobotState.angVelo);
 
-            System.out.println("left: " + Math.toDegrees(targetLeftModuleAngle));
-            System.out.println("right: " + Math.toDegrees(targetRightModuleAngle));
+            // System.out.println("left: " + Math.toDegrees(targetLeftModuleAngle));
+            // System.out.println("right: " + Math.toDegrees(targetRightModuleAngle));
             
 
             targetLeftWheelSpeed = targetTangentialSpeed * leftWheelToTurnCenter.getMagnitude() / turnCenter.getMagnitude();

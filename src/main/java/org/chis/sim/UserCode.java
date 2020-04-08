@@ -63,6 +63,8 @@ public class UserCode{
             0.0
         );
 
+        System.out.println(Controls.slider *3);
+
         // setDrivePowersAndFeed(
         //     1,
         //     -1,

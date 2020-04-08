@@ -80,7 +80,7 @@ public class Controls {
             }else if(componentIdentifier == Component.Identifier.Axis.RZ){
                 rawZ = value;
             }else if(componentIdentifier == Component.Identifier.Axis.SLIDER){
-                slider = value;
+                slider = -value;
             }
 
             //commented out the other buttons to improve performance
