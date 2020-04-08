@@ -20,6 +20,9 @@ public class UserCode{
 
     static Vector2D joystick;
 
+    static Vector2D targetLinVelo = new Vector2D();
+    static double targetAngVelo = 0;
+
     public static void initialize(){ //this function is run once when the robot starts
         GraphicDebug.turnOnAll(); //displaying the graphs
 
@@ -48,9 +51,27 @@ public class UserCode{
 
 
         // joystick = joystick.scalarMult(8).rotate(-Main.robot.heading);
-        joystick = joystick.scalarMult(1.5).rotate(-Main.robot.heading);
+        joystick = joystick.scalarMult(0.1).rotate(-Main.robot.heading);
+
+        if(Math.abs(joystick.getMagnitude()) > 0.01){
+            targetLinVelo = targetLinVelo.add(joystick);
+            if(targetLinVelo.getMagnitude() > 2){
+                targetLinVelo = new Vector2D(2, targetLinVelo.getAngle(), Type.POLAR);
+            }
+        }else{
+            targetLinVelo = targetLinVelo.scalarMult(0.9);
+        }
+
         
-        targetRobotState = new RobotState(new Vector2D(joystick.x, joystick.y, Type.CARTESIAN), Controls.slider*3);
+        if(Math.abs(Controls.slider) > 0.1){
+            if(Math.abs(targetAngVelo + Controls.slider * 0.5) < 2){
+                targetAngVelo += Controls.slider * 0.5;
+            }
+        }else{
+            targetAngVelo *= 0.9;
+        }
+        
+        targetRobotState = new RobotState(targetLinVelo, targetAngVelo);
         // targetRobotState = new RobotState(new Vector2D(0., -0.0, Type.CARTESIAN), -1);
 
         controller.move(targetRobotState);
@@ -63,7 +84,6 @@ public class UserCode{
             0.0
         );
 
-        System.out.println(Controls.slider *3);
 
         // setDrivePowersAndFeed(
         //     1,
