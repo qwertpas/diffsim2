@@ -51,28 +51,30 @@ public class UserCode{
         );
 
 
-        joystick = joystick.scalarMult(0.1);
+        joystick = joystick.scalarMult(3).rotate(-Main.robot.heading);
         // joystick = joystick.scalarMult(0.1);
 
-        if(Math.abs(joystick.getMagnitude()) > 0.01){
-            targetLinVelo = targetLinVelo.add(joystick);
-            if(targetLinVelo.getMagnitude() > 2){
-                targetLinVelo = new Vector2D(2, targetLinVelo.getAngle(), Type.POLAR);
-            }
-        }else{
-            targetLinVelo = targetLinVelo.scalarMult(0.9);
-        }
+        // if(Math.abs(joystick.getMagnitude()) > 0.01){
+        //     targetLinVelo = targetLinVelo.add(joystick);
+        //     if(targetLinVelo.getMagnitude() > 2){
+        //         targetLinVelo = new Vector2D(2, targetLinVelo.getAngle(), Type.POLAR);
+        //     }
+        // }else{
+        //     targetLinVelo = targetLinVelo.scalarMult(0.9);
+        // }
 
-        targetLinVelo.rotate(-Main.robot.heading);
 
         
-        if(Math.abs(Controls.slider) > 0.1){
-            if(Math.abs(targetAngVelo + Controls.slider * 0.5) < 4){
-                targetAngVelo += Controls.slider * 0.5;
-            }
-        }else{
-            targetAngVelo *= 0.9;
-        }
+        // if(Math.abs(Controls.slider) > 0.1){
+        //     if(Math.abs(targetAngVelo + Controls.slider * 0.5) < 4){
+        //         targetAngVelo += Controls.slider * 0.5;
+        //     }
+        // }else{
+        //     targetAngVelo *= 0.9;
+        // }
+        targetLinVelo = joystick.add(controller.robotState.linVelo);
+        // targetAngVelo = -Controls.rawZ * 3;
+        targetAngVelo = 0;
         
         targetRobotState = new RobotState(targetLinVelo, targetAngVelo);
         // targetRobotState = new RobotState(new Vector2D(0., -0.0, Type.CARTESIAN), -1);
@@ -139,7 +141,7 @@ public class UserCode{
     // Motion graphs
     static Serie w1s1 = new Serie(Color.BLUE, 3);
     static Serie w1s2 = new Serie(Color.RED, 3);
-    static GraphicDebug w1 = new GraphicDebug("net forces", new Serie[]{w1s1, w1s2}, 100);
+    static GraphicDebug w1 = new GraphicDebug("linVelo", new Serie[]{w1s1, w1s2}, 100);
 
     static Serie w2s1 = new Serie(Color.BLUE, 3);
     static Serie w2s2 = new Serie(Color.RED, 3);
@@ -154,8 +156,8 @@ public class UserCode{
     static GraphicDebug w4 = new GraphicDebug("left angVelo", new Serie[]{w4s1, w4s2}, 100);
     
     private static void graph(){
-        w1s1.addPoint(Main.elaspedTime, Main.robot.leftModule.force.x);
-        w1s2.addPoint(Main.elaspedTime, Main.robot.rightModule.force.x);
+        w1s1.addPoint(Main.elaspedTime, Main.robot.linVelo.getMagnitude());
+        w1s2.addPoint(Main.elaspedTime, targetLinVelo.getMagnitude());
 
         w2s1.addPoint(Main.elaspedTime, Main.robot.angVelo);
         w2s2.addPoint(Main.elaspedTime, UserCode.targetRobotState.angVelo);

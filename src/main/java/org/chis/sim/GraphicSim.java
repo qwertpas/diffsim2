@@ -30,11 +30,13 @@ public class GraphicSim extends JPanel implements MouseListener {
 
 	static File robotFile;
 	static File moduleFile;
-	static File turnCenterFile;
+    static File turnCenterFile;
+    static File fieldFile;
 
 	static BufferedImage robotImage;
     static BufferedImage moduleImage;
     static BufferedImage turnCenterImage;
+    static BufferedImage fieldImage;
 
 
 	static int screenHeight;
@@ -80,6 +82,10 @@ public class GraphicSim extends JPanel implements MouseListener {
 		// g.drawString("LT motor torque " + Util.roundHundreths(Main.robot.leftModule.topMotor.torque), 700, 775);
 		// g.drawString("LB motor torque " + Util.roundHundreths(Main.robot.leftModule.bottomMotor.torque), 700, 800);
 
+        double fieldScale = 0.75;
+        g2d.scale(fieldScale, fieldScale);
+        g.drawImage(fieldImage, 80, 500, this);
+        g2d.scale(1/fieldScale, 1/fieldScale);
 
 		//drawing the grid
 		g.setColor(Color.GRAY.brighter());
@@ -88,7 +94,8 @@ public class GraphicSim extends JPanel implements MouseListener {
 		}
 		for(int i = 0; i < screenHeight; i += Constants.DISPLAY_SCALE.getDouble() / Util.metersToFeet(1)){
 			g.drawLine(0, i, screenWidth, i);
-		}
+        }
+        
 		
 
 		int robotCenterX = x + robotDisplayWidth/2;
@@ -129,9 +136,9 @@ public class GraphicSim extends JPanel implements MouseListener {
         
 
 
-        
-        Vector2D turnCenter = UserCode.controller.turnCenter;
-        g.drawImage(turnCenterImage, (int) (turnCenter.x * Constants.DISPLAY_SCALE.getDouble()/robotScale)+10, (int) -(turnCenter.y * Constants.DISPLAY_SCALE.getDouble()/robotScale)+10, this);
+        //star picture
+        // Vector2D turnCenter = UserCode.controller.turnCenter;
+        // g.drawImage(turnCenterImage, (int) (turnCenter.x * Constants.DISPLAY_SCALE.getDouble()/robotScale)+10, (int) -(turnCenter.y * Constants.DISPLAY_SCALE.getDouble()/robotScale)+10, this);
 
         
 
@@ -151,11 +158,13 @@ public class GraphicSim extends JPanel implements MouseListener {
 		try {
 			robotFile = new File("./src/images/robot.png");
 			moduleFile = new File("./src/images/module.png");
-			turnCenterFile = new File("./src/images/turnCenter.png");
+            turnCenterFile = new File("./src/images/turnCenter.png");
+            fieldFile = new File("./src/images/field.png");
 
 			robotImage = ImageIO.read(robotFile);
             moduleImage = ImageIO.read(moduleFile);
             turnCenterImage = ImageIO.read(turnCenterFile);
+            fieldImage = ImageIO.read(fieldFile);
 
 
 			setDisplayScales(robotFile);

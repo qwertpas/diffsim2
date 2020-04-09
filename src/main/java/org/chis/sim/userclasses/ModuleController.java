@@ -20,7 +20,7 @@ public class ModuleController{
 
     SimpleMatrix u;
 
-    private PIDF anglePIDF = new PIDF(1, 0.05, 0, 0.0, 0, 0);
+    private PIDF anglePIDF = new PIDF(1, 0.05, 0, 0.0, 0.5, 0);
     private PIDF forwardPIDF = new PIDF(0.1, 0.005, 0, 0.02, 0, 0);
 
     private SimpleMatrix K = new SimpleMatrix(new double[][] { //from matlab calcs
@@ -45,15 +45,22 @@ public class ModuleController{
             if(reversed) modifiedTargetState.wheelAngVelo = -targetState.wheelAngVelo;
             
             double rotPower = anglePIDF.loop(state.moduleAngle, modifiedTargetState.moduleAngle);
-            if(anglePIDF.inTolerance) rotPower = 0;
             double forwardPower = forwardPIDF.loop(state.wheelAngVelo, modifiedTargetState.wheelAngVelo);
+
+
+            if(!anglePIDF.inTolerance) forwardPower  = 0;
             // double forwardPower = modifiedTargetState.wheelAngVelo*0.25;
     
-            // double maxPower = Math.abs(rotPower) + Math.abs(forwardPower);
-            double maxPower = 1;
     
-            double topPower = (rotPower + forwardPower) / maxPower;
-            double bottomPower = (rotPower - forwardPower) / maxPower;
+            double topPower = rotPower + forwardPower;
+            double bottomPower = rotPower - forwardPower;
+
+            if(topPower > 1 || bottomPower > 1){
+                double maxPower = Math.abs(rotPower) + Math.abs(forwardPower);
+                topPower /= maxPower;
+                bottomPower /= maxPower;
+            }
+
             modulePowers = new ModulePowers(topPower, bottomPower);
             return modulePowers;
         }

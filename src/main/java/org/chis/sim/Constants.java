@@ -44,7 +44,7 @@ public class Constants{
 
     // Friction between wheels and ground. This stops strafing if the modules are not aligned. Is a coefficient.
     public static Constant WHEEL_STATIC_COEFF = new Constant("WHEEL_STATIC_COEFF", 1, Type.DOUBLE); 
-    public static Constant WHEEL_KINE_COEFF = new Constant("WHEEL_KINE_COEFF", 0.5, Type.DOUBLE); 
+    public static Constant WHEEL_KINE_COEFF = new Constant("WHEEL_KINE_COEFF", 1, Type.DOUBLE); 
     public static Constant WHEEL_FRIC_THRESHOLD = new Constant("WHEEL_FRIC_THRESHOLD", 0.01, Type.DOUBLE); //lowest wheel scrub m/sec considered as 'moving' to kine fric
 
     // Rotational friction that slows robot turning. Is a combo of robot length/width, drop center, friction in omnis. Is a torque.
