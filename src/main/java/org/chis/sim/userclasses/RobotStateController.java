@@ -9,8 +9,8 @@ public class RobotStateController {
 
     public RobotState robotState;
 
-    public ModuleController leftController = new ModuleController(new ModuleState());
-    public ModuleController rightController = new ModuleController(new ModuleState());
+    public ModuleController leftController = new ModuleController(new ModuleState(0, 0, 0, 0));
+    public ModuleController rightController = new ModuleController(new ModuleState(0, 0, 0, 0));
 
     public ModuleState leftTargetModuleState;
     public ModuleState rightTargetModuleState;

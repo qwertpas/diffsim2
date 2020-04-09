@@ -145,14 +145,14 @@ public class Calculate {
             }
             lastTime = System.currentTimeMillis();
 
-            if (Math.signum(lastError) != Math.signum(error)) { // "bounces" back after reaching target, braking
-                I = 0;
-            }
+            // if (Math.signum(lastError) != Math.signum(error)) { // "bounces" back after reaching target, braking
+            //     I = 0;
+            // }
 
             P = kP * error;
             I = I + (kI * error);
             D = kD * (lastError - error);
-            F = Math.copySign(kF, error);
+            F = kF * target;
 
             if (Math.abs(P + I + F - D) < 0) {
                 power = 0;

@@ -8,18 +8,20 @@ import org.ejml.simple.SimpleMatrix;
 
 public class ModuleController{
 
-    public ModuleState state;
-    public ModuleState modifiedTargetState;
-    public boolean reversed;
+    public ModuleState state = new ModuleState(0, 0, 0, 0);
+    public ModuleState modifiedTargetState = new ModuleState(0, 0, 0, 0);
+    public boolean reversed = false;
 
-    public ModulePowers modulePowers;
+    public boolean stop = false;
+
+    public ModulePowers modulePowers = new ModulePowers(0, 0);
 
     public Vector2D odometer = new Vector2D();
 
     SimpleMatrix u;
 
     private PIDF anglePIDF = new PIDF(1, 0.05, 0, 0.0, 0, 0);
-    private PIDF forwardPIDF = new PIDF(0.1, 0.0, 0, 0.0, 0, 0);
+    private PIDF forwardPIDF = new PIDF(0.1, 0.005, 0, 0.02, 0, 0);
 
     private SimpleMatrix K = new SimpleMatrix(new double[][] { //from matlab calcs
         { 22.36,    0,    0,    8.06},
@@ -30,23 +32,31 @@ public class ModuleController{
         state = initialState;
     }
 
+    public void stop(boolean stopOrNot){
+        stop = stopOrNot;
+    }
+
     public ModulePowers move(ModuleState targetState){
-        modifiedTargetState = targetState.copy(); //modify to find optimal angle with same results
-        modifiedTargetState.moduleAngle = calcClosestModuleAngle(state.moduleAngle, targetState.moduleAngle);
-        if(reversed) modifiedTargetState.wheelAngVelo = -targetState.wheelAngVelo;
-        
-        double rotPower = anglePIDF.loop(state.moduleAngle, modifiedTargetState.moduleAngle);
-        if(anglePIDF.inTolerance) rotPower = 0;
-        double forwardPower = forwardPIDF.loop(state.wheelAngVelo, modifiedTargetState.wheelAngVelo);
-        // double forwardPower = modifiedTargetState.wheelAngVelo*0.25;
-
-        // double maxPower = Math.abs(rotPower) + Math.abs(forwardPower);
-        double maxPower = 1;
-
-        double topPower = (rotPower + forwardPower) / maxPower;
-        double bottomPower = (rotPower - forwardPower) / maxPower;
-        modulePowers = new ModulePowers(topPower, bottomPower);
-        return modulePowers;
+        if(stop){
+            return new ModulePowers(0, 0);
+        }else{
+            modifiedTargetState = targetState.copy(); //modify to find optimal angle with same results
+            modifiedTargetState.moduleAngle = calcClosestModuleAngle(state.moduleAngle, targetState.moduleAngle);
+            if(reversed) modifiedTargetState.wheelAngVelo = -targetState.wheelAngVelo;
+            
+            double rotPower = anglePIDF.loop(state.moduleAngle, modifiedTargetState.moduleAngle);
+            if(anglePIDF.inTolerance) rotPower = 0;
+            double forwardPower = forwardPIDF.loop(state.wheelAngVelo, modifiedTargetState.wheelAngVelo);
+            // double forwardPower = modifiedTargetState.wheelAngVelo*0.25;
+    
+            // double maxPower = Math.abs(rotPower) + Math.abs(forwardPower);
+            double maxPower = 1;
+    
+            double topPower = (rotPower + forwardPower) / maxPower;
+            double bottomPower = (rotPower - forwardPower) / maxPower;
+            modulePowers = new ModulePowers(topPower, bottomPower);
+            return modulePowers;
+        }
     }
 
     public ModulePowers moveStateSpace(ModuleState targetState){
@@ -133,13 +143,6 @@ public class ModuleController{
             this.moduleAngVelo = moduleAngVelo;
             this.wheelAngle = wheelAngVelo;
             this.wheelAngVelo = wheelAngVelo;
-        }
-
-        public ModuleState(){
-            this.moduleAngle = 0;
-            this.moduleAngVelo = 0;
-            this.wheelAngle = 0;
-            this.wheelAngVelo = 0;
         }
 
         public SimpleMatrix getState(){

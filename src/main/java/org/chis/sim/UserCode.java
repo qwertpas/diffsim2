@@ -4,6 +4,7 @@ import org.chis.sim.GraphicDebug.Serie;
 import org.chis.sim.Util.Vector2D;
 import org.chis.sim.Util.Vector2D.Type;
 import org.chis.sim.userclasses.RobotController;
+import org.chis.sim.userclasses.RobotController.RobotPowers;
 import org.chis.sim.userclasses.RobotController.RobotState;
 
 import java.awt.Color;
@@ -50,8 +51,8 @@ public class UserCode{
         );
 
 
-        // joystick = joystick.scalarMult(8).rotate(-Main.robot.heading);
-        joystick = joystick.scalarMult(0.1).rotate(-Main.robot.heading);
+        joystick = joystick.scalarMult(0.1);
+        // joystick = joystick.scalarMult(0.1);
 
         if(Math.abs(joystick.getMagnitude()) > 0.01){
             targetLinVelo = targetLinVelo.add(joystick);
@@ -62,9 +63,11 @@ public class UserCode{
             targetLinVelo = targetLinVelo.scalarMult(0.9);
         }
 
+        targetLinVelo.rotate(-Main.robot.heading);
+
         
         if(Math.abs(Controls.slider) > 0.1){
-            if(Math.abs(targetAngVelo + Controls.slider * 0.5) < 2){
+            if(Math.abs(targetAngVelo + Controls.slider * 0.5) < 4){
                 targetAngVelo += Controls.slider * 0.5;
             }
         }else{
@@ -74,13 +77,13 @@ public class UserCode{
         targetRobotState = new RobotState(targetLinVelo, targetAngVelo);
         // targetRobotState = new RobotState(new Vector2D(0., -0.0, Type.CARTESIAN), -1);
 
-        controller.move(targetRobotState);
+        RobotPowers robotPowers = controller.move(targetRobotState);
 
         setDrivePowersAndFeed(
-            controller.leftController.modulePowers.topPower,
-            controller.leftController.modulePowers.bottomPower,
-            controller.rightController.modulePowers.topPower,
-            controller.rightController.modulePowers.bottomPower,
+            robotPowers.leftTopPower,
+            robotPowers.leftBottomPower,
+            robotPowers.rightTopPower,
+            robotPowers.rightBottomPower,
             0.0
         );
 
